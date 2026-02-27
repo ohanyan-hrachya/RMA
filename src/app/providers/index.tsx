@@ -1,6 +1,6 @@
-import { BrowserRouter } from 'react-router-dom';
-import { Query } from './query';
-import { Theme } from './theme';
+import { BrowserRouter } from "react-router-dom";
+import { Query } from "./query";
+import { Theme } from "./theme";
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
