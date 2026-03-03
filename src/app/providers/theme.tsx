@@ -7,6 +7,7 @@ import {
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { useEffect, useMemo, type PropsWithChildren } from "react";
 import { useUIStore } from "../../store/ui.store";
+import type { ColorMode } from "../../shared/types";
 
 const baseOptions: ThemeOptions = {
   typography: {
@@ -78,8 +79,6 @@ const darkTheme: PaletteOptions = {
   error: { main: "#DC2626", light: "#FEE2E2" },
   info: { main: "#2563EB", light: "#DBEAFE" },
 };
-
-export type ColorMode = "light" | "dark";
 
 function buildTheme(mode: ColorMode) {
   const theme = createTheme({
