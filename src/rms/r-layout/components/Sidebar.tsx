@@ -96,17 +96,17 @@ export function Sidebar({
                                     transition: 'all 0.2s',
                                     "&.Mui-selected": {
                                         bgcolor: "primary.main",
-                                        color: "#fff",
+                                        color: "#F1F5F9",
                                         boxShadow: (theme) => `0 4px 12px ${theme.palette.primary.main}40`,
                                         "&:hover": { bgcolor: "primary.dark" },
-                                        "& .MuiListItemIcon-root": { color: "#fff" },
+                                        "& .MuiListItemIcon-root": { color: "#F1F5F9" },
                                     },
                                 }}
                             >
                                 <ListItemIcon
                                     sx={{
                                         minWidth: collapsed ? 0 : 36,
-                                        color: active ? "#fff" : "text.secondary",
+                                        color: active ? "#F1F5F9" : "text.secondary",
                                     }}
                                 >
                                     {icon}

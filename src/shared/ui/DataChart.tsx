@@ -4,7 +4,7 @@ import {
     ResponsiveContainer, PieChart, Pie, Cell, Legend
 } from "recharts";
 
-const PIE_COLORS = ["#2563EB", "#7C3AED", "#059669", "#D97706", "#DC2626", "#0891B2"];
+const PIE_COLORS = ["#10B981", "#34D399", "#059669", "#064E3B", "#1E293B", "#334155"];
 
 interface DataChartProps {
     type: "area" | "pie";
@@ -35,12 +35,12 @@ export function DataChart({ type, data, height = 260, hideAxes }: DataChartProps
                     </PieChart>
                 ) : (
                     <AreaChart data={data}>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.05)" />
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} strokeOpacity={0.1} />
                         <XAxis dataKey="month" hide={hideAxes} />
                         <YAxis hide={hideAxes} />
                         <ChartTooltip />
-                        <Area type="monotone" dataKey="users" stroke="#2563EB" fill="#2563EB" fillOpacity={0.1} />
-                        <Area type="monotone" dataKey="applications" stroke="#7C3AED" fill="#7C3AED" fillOpacity={0.1} />
+                        <Area type="monotone" dataKey="users" stroke="#10B981" fill="#10B981" fillOpacity={0.1} />
+                        <Area type="monotone" dataKey="applications" stroke="#34D399" fill="#34D399" fillOpacity={0.1} />
                     </AreaChart>
                 )}
             </ResponsiveContainer>

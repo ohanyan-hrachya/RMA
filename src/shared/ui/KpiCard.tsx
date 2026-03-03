@@ -19,10 +19,10 @@ const ICON_MAP: Record<string, React.ReactNode> = {
 };
 
 const COLOR_MAP: Record<string, string> = {
-    users: "primary.light",
-    jobs: "secondary.light",
-    banking: "warning.light",
-    overview: "info.light",
+    users: "success.light",
+    jobs: "success.light",
+    banking: "success.light",
+    overview: "success.light",
     success: "success.light",
 };
 
@@ -37,8 +37,8 @@ interface KpiCardProps {
 
 export function KpiCard({ title, value, subtitle, resource, change, delay = 0 }: KpiCardProps) {
     const icon = resource ? ICON_MAP[resource] : <DashboardIcon />;
-    const iconBg = resource ? COLOR_MAP[resource] : "primary.light";
-    const iconColor = resource ? resource + ".main" : "primary.main";
+    const iconBg = resource ? COLOR_MAP[resource] : "success.light";
+    const iconColor = "success.main";
 
     return (
         <motion.div

@@ -22,7 +22,7 @@ export function Logo({ collapsed, showText = true }: LogoProps) {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    color: "#fff",
+                    color: "#F1F5F9",
                     fontWeight: 800,
                     fontSize: 16,
                     boxShadow: (theme) => `0 4px 12px ${theme.palette.primary.main}40`,

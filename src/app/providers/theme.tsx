@@ -29,7 +29,7 @@ const baseOptions: ThemeOptions = {
           "&:hover": { boxShadow: "none" },
         },
         containedPrimary: {
-          "&:hover": { boxShadow: "0 4px 14px rgba(37, 99, 235, 0.3)" },
+          "&:hover": { boxShadow: "0 4px 14px rgba(16, 185, 129, 0.3)" },
         },
       },
     },
@@ -56,28 +56,28 @@ const baseOptions: ThemeOptions = {
 
 const lightTheme: PaletteOptions = {
   mode: "light",
-  primary: { main: "#2563EB", light: "#60A5FA", dark: "#1D4ED8" },
-  secondary: { main: "#7C3AED" },
-  background: { default: "#F8FAFC", paper: "#FFFFFF" },
-  text: { primary: "#0F172A", secondary: "#64748B" },
+  primary: { main: "#10B981", light: "#34D399", dark: "#059669" },
+  secondary: { main: "#0F172A" },
+  background: { default: "#F1F5F9", paper: "#FFFFFF" },
+  text: { primary: "#020617", secondary: "#475569" },
   divider: "#E2E8F0",
-  success: { main: "#059669", light: "#D1FAE5" },
-  warning: { main: "#D97706", light: "#FEF3C7" },
-  error: { main: "#DC2626", light: "#FEE2E2" },
-  info: { main: "#2563EB", light: "#DBEAFE" },
+  success: { main: "#10B981", light: "#D1FAE5" },
+  warning: { main: "#F59E0B", light: "#FEF3C7" },
+  error: { main: "#EF4444", light: "#FEE2E2" },
+  info: { main: "#06B6D4", light: "#CFFAFE" },
 };
 
 const darkTheme: PaletteOptions = {
   mode: "dark",
-  primary: { main: "#2563EB", light: "#60A5FA", dark: "#1D4ED8" },
-  secondary: { main: "#7C3AED" },
-  background: { default: "#0F172A", paper: "#1E293B" },
-  text: { primary: "#F8FAFC", secondary: "#94A3B8" },
-  divider: "#334155",
-  success: { main: "#059669", light: "#D1FAE5" },
-  warning: { main: "#D97706", light: "#FEF3C7" },
-  error: { main: "#DC2626", light: "#FEE2E2" },
-  info: { main: "#2563EB", light: "#DBEAFE" },
+  primary: { main: "#10B981", light: "#34D399", dark: "#059669" },
+  secondary: { main: "#F1F5F9" },
+  background: { default: "#020617", paper: "#0F172A" },
+  text: { primary: "#F1F5F9", secondary: "#94A3B8" },
+  divider: "#1E293B",
+  success: { main: "#10B981", light: "#064E3B" },
+  warning: { main: "#F59E0B", light: "#451A03" },
+  error: { main: "#EF4444", light: "#450A0A" },
+  info: { main: "#3B82F6", light: "#172554" },
 };
 
 function buildTheme(mode: ColorMode) {
