@@ -60,38 +60,41 @@
 ### Architecture Diagram
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                      App Shell                          │
-│  ┌──────────┐  ┌──────────┐  ┌───────────────────────┐  │
-│  │ Sidebar  │  │ Top Bar  │  │ Content Area (Outlet) │  │
-│  └──────────┘  └──────────┘  └───────────────────────┘  │
-└─────────────────────────────────────────────────────────┘
-         │                              │
-         ▼                              ▼
-┌─────────────────┐          ┌─────────────────────────┐
-│   app/           │          │   modules/               │
-│  ├─ AdminLayout  │          │  ├─ users/               │
-│  ├─ theme        │          │  │  ├─ UsersPage.tsx     │
-│  └─ router       │          │  │  ├─ usersService.ts   │
-└─────────────────┘          │  │  └─ usersTypes.ts     │
-                              │  ├─ jobs/                │
-┌─────────────────┐          │  ├─ banking/             │
-│   rma/           │          │  └─ overview/            │
-│  ├─ CrudModule   │◄─────────┤                          │
-│  ├─ DashboardMod │          └─────────────────────────┘
-│  ├─ FormModule   │
-│  └─ DialogHost   │          ┌─────────────────────────┐
-└─────────────────┘          │   platform/              │
-                              │  ├─ api.ts (axios)      │
-┌─────────────────┐          │  ├─ queryClient.ts       │
-│   store/         │          │  └─ mockApi.ts           │
-│  ├─ authStore    │          └─────────────────────────┘
-│  └─ uiStore      │
-└─────────────────┘          ┌─────────────────────────┐
-                              │   shared/                │
-                              │  ├─ components/          │
-                              │  └─ hooks/               │
-                              └─────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                        App Shell                            │
+│  ┌────────────────┐  ┌────────────────┐  ┌───────────────┐  │
+│  │   Sidebar      │  │    Topbar      │  │ Content Area  │  │
+│  │ (components/)  │  │ (components/)  │  │   (Outlet)    │  │
+│  └────────────────┘  └────────────────┘  └───────────────┘  │
+└─────────────────────────────┬───────────────────────────────┘
+                              │
+          ┌───────────────────┴───────────────────┐
+          ▼                                       ▼
+┌───────────────────┐               ┌──────────────────────────┐
+│   rms/ (Engine)   │               │   modules/ (Features)    │
+│  ├─ r-layout/     │               │  ├─ users/               │
+│  │  ├─ Sidebar    │               │  │  ├─ UsersPage.tsx     │
+│  │  └─ Topbar     │◄──────────────┤  │  └─ ...               │
+│  └─ r-module/     │               │  ├─ jobs/                │
+│     ├─ CrudModule │               │  └─ ...               │
+│     └─ hooks/     │               └──────────────────────────┘
+└───────────────────┘                              │
+          │                                        ▼
+          │                         ┌──────────────────────────┐
+          │                         │   services/ (Data)       │
+          │                         │  ├─ api.ts               │
+          │                         │  └─ mock/                │
+          │                         │     ├─ data.ts           │
+          │                         │     ├─ logic.ts          │
+          │                         │     └─ config.ts         │
+          └─────────────────────────┘──────────────────────────┘
+                                                             │
+                                                             ▼
+                                            ┌──────────────────────────┐
+                                            │   store/ (State)         │
+                                            │  ├─ auth.store.ts        │
+                                            │  └─ ui.store.ts          │
+                                            └──────────────────────────┘
 ```
 
 ---
@@ -100,51 +103,45 @@
 
 ```
 src/
-├── app/                          # Application shell
-│   ├── AdminLayout.tsx           # Main layout with sidebar + top bar
-│   ├── theme.ts                  # MUI theme configuration
-│   └── router.tsx                # (future) centralized route config
+├── app/                          # Application shell & providers
+│   ├── providers/                # Theme, Query, Router providers
+│   └── main.tsx                  # Entry point
 │
-├── platform/                     # Infrastructure layer
+├── services/                     # Data infrastructure
 │   ├── api.ts                    # Axios instance + interceptors
-│   ├── queryClient.ts            # React Query client + key factory
-│   └── mockApi.ts                # Mock API layer for development
+│   ├── mock/                     # 🔥 Modular Mock API
+│   │   ├── data.ts               # Raw mock data
+│   │   ├── api-logic.ts          # Mock implementation logic
+│   │   └── config.ts             # APP_CONFIG definitions
+│   └── mockApi.ts                # Aggregator (main dev service)
 │
-├── rma/                          # 🔥 Reusable Module Architecture engine
-│   ├── CrudModule.tsx            # Generic CRUD table + drawer + dialog
-│   ├── DashboardModule.tsx       # KPI cards + widget grid
-│   ├── FormModule.tsx            # (planned) Zod-driven dynamic forms
-│   └── DialogHost.tsx            # (planned) Centralized dialog manager
+├── rms/                          # 🔥 Reusable Module System (Engine)
+│   ├── r-layout/                 # Layout subsystem
+│   │   ├── components/           │ Sidebar, Topbar, Logo
+│   │   ├── hooks/                │ useLayout hook
+│   │   └── LayoutEngine.tsx      │ Main shell orchestrator
+│   └── r-module/                 # Module components subsystem
+│       ├── components/           │ RowActions, etc.
+│       ├── hooks/                │ useCrudModule logic
+│       └── CrudModule.tsx        │ Generic CRUD engine
 │
-├── modules/                      # Feature modules (business logic lives here)
-│   ├── users/
-│   │   ├── UsersPage.tsx         # Thin wrapper → CrudModule config
-│   │   ├── usersService.ts       # (planned) API service functions
-│   │   └── usersTypes.ts         # (planned) TypeScript interfaces
-│   ├── jobs/
-│   │   ├── JobsPage.tsx
-│   │   └── ...
-│   ├── banking/
-│   │   ├── BankingPage.tsx
-│   │   └── ...
-│   └── overview/
-│       ├── OverviewPage.tsx
-│       └── ...
+├── modules/                      # Business feature modules
+│   ├── users/                    │ Users module
+│   ├── jobs/                     │ Jobs module
+│   └── overview/                 │ Global dashboard
 │
-├── shared/                       # Cross-cutting reusable code
-│   ├── components/
-│   │   ├── PermissionGate.tsx    # Conditional rendering by permission
-│   │   └── StatusChip.tsx        # Reusable status badge
-│   └── hooks/
-│       └── usePermission.ts     # Permission check hooks
+├── shared/                       # Global primitives
+│   ├── ui/                       # Reusable UI (AutoForm, DataTable)
+│   ├── hooks/                    # Reusable logic (usePermission)
+│   ├── helpers/                  # API helpers, pagination utils
+│   └── types/                    # Centralized TypeScript contracts
 │
 ├── store/                        # Global state (Zustand)
-│   ├── authStore.ts              # Auth, tokens, permissions
-│   └── uiStore.ts                # Sidebar state, theme mode
+│   ├── auth.store.ts             # Permissions & Auth
+│   ├── ui.store.ts               # Theme, Sidebar, UI state
+│   └── config.store.ts           # Dynamic app config store
 │
-├── App.tsx                       # Root component (providers + router)
-├── main.tsx                      # Entry point
-└── index.css                     # Global styles + Tailwind
+└── App.tsx                       # Root container
 ```
 
 ### File Naming Conventions
@@ -155,8 +152,8 @@ src/
 | Service | `camelCase` + `Service` suffix | `usersService.ts` |
 | Types | `camelCase` + `Types` suffix | `usersTypes.ts` |
 | Hook | `use` prefix + `PascalCase` | `usePermission.ts` |
-| Store | `camelCase` + `Store` suffix | `authStore.ts` |
-| RMA engine | `PascalCase` + `Module` suffix | `CrudModule.tsx` |
+| Store | `camelCase` + `.store.ts` suffix | `auth.store.ts` |
+| RMS engine | `PascalCase` + `Module` suffix | `CrudModule.tsx` |
 
 ---
 
@@ -177,26 +174,23 @@ src/
 │  MODULE / BUSINESS LAYER                           │
 │  Services, Types, Validation Schemas               │
 │  Rule: All domain logic lives here.               │
+│  Import: @/services, @/shared                      │
 ├───────────────────────────────────────────────────┤
-│  PLATFORM / INFRASTRUCTURE LAYER                   │
-│  Axios, React Query, Auth utilities                │
-│  Rule: Framework-agnostic, module-agnostic.       │
-├───────────────────────────────────────────────────┤
-│  STATE LAYER                                       │
-│  Zustand stores (auth, ui)                         │
-│  Rule: Minimal, normalized, no derived state.     │
+│  SERVICE / INFRASTRUCTURE LAYER                   │
+│  Axios, React Query, Mock API Layer                │
+│  Rule: Infrastructure-agnostic, module-agnostic.   │
 └───────────────────────────────────────────────────┘
 ```
 
 ### Dependency Rules
 
-- **Pages** → may import from `rma/`, `modules/` (own module only), `shared/`, `store/`
-- **RMA engine** → may import from `platform/`, `store/`, `shared/`
-- **Modules** → may import from `platform/`, `shared/`, `store/`
-- **Platform** → may import from `store/` (for auth interceptors only)
+- **Pages** → may import from `rms/r-module/`, `modules/` (own module only), `shared/`, `store/`
+- **RMA engine** → may import from `services/`, `store/`, `shared/`
+- **Modules** → may import from `services/`, `shared/`, `store/`
+- **Infrastructure** → may import from `store/` (for auth interceptors only)
 - **Shared** → may import from `store/` (for permission hooks only)
 - ❌ **Never**: cross-module imports (`users/` → `jobs/`)
-- ❌ **Never**: `rma/` importing from `modules/`
+- ❌ **Never**: `rms/` importing from `modules/`
 
 ---
 
@@ -305,16 +299,15 @@ export default function UsersPage() {
 
 #### Refactoring Guidelines
 
-When `CrudModule.tsx` exceeds 300 lines, extract into:
+The `CrudModule` follows a logic-presentation separation pattern. The main file acts as an orchestrator, while logic and sub-UI are delegated:
 
 ```
-rma/
-├── CrudModule.tsx           # Main orchestrator (state + composition)
-├── CrudToolbar.tsx          # Search + Create button
-├── CrudDataGrid.tsx         # DataGrid wrapper with custom slots
-├── CrudDrawer.tsx           # Create/Edit drawer shell
-├── CrudDeleteDialog.tsx     # Confirmation dialog
-└── CrudViewDrawer.tsx       # View details drawer
+rms/r-module/
+├── CrudModule.tsx           # Main orchestrator (composition)
+├── components/
+│   └── RowActions.tsx       # Table row action buttons
+└── hooks/
+    └── useCrudModule.ts     # Core state, queries, and mutations
 ```
 
 ---
@@ -441,47 +434,25 @@ rma/
 
 ---
 
-### 4.4 DialogHost (Planned)
+### 4.4 Shared UI Primitives
 
-The `DialogHost` will provide centralized dialog management, allowing any component to trigger dialogs without local state.
+The architecture provides "Auto" components that generate UI from metadata, reducing repetitive JSX.
 
-#### Planned Interface
+#### AutoForm
+Generates an interactive form from a `FormFieldSchema[]`.
+- Support for `text`, `select`, `date`, `checkbox`.
+- Built-in validation (required fields).
+- Automatic grid layout.
 
-```typescript
-interface DialogConfig {
-  id: string;
-  title: string;
-  content: ReactNode | ((close: () => void) => ReactNode);
-  actions?: DialogAction[];
-  maxWidth?: 'xs' | 'sm' | 'md' | 'lg';
-  permission?: string;          // Required permission to execute primary action
-  schema?: ZodSchema;           // Optional form validation
-}
+#### AutoView
+Generates a read-only details view from a `ViewFieldSchema[]`.
+- Support for `currency`, `date`, `chip`, `boolean` formatting.
+- Consistent visual hierarchy (Label/Value pairs).
 
-interface DialogAction {
-  label: string;
-  variant?: 'text' | 'contained' | 'outlined';
-  color?: 'primary' | 'error' | 'warning';
-  onClick: (data?: unknown) => void | Promise<void>;
-  permission?: string;
-}
-
-// Global dialog store
-interface DialogStore {
-  dialogs: Map<string, DialogConfig>;
-  open: (config: DialogConfig) => void;
-  close: (id: string) => void;
-  closeAll: () => void;
-}
-```
-
-#### Planned Features
-
-- **Global dialog queue**: Multiple dialogs can be stacked
-- **Permission-gated actions**: Primary action disabled without permission
-- **Zod form validation**: Inline form with validation before action
-- **Promise-based API**: `await dialogStore.open(config)` resolves on close
-- **Animated transitions**: Framer Motion enter/exit animations
+#### DataTable
+A styled wrapper around MUI DataGrid with standardized pagination and loading states.
+- Handles server-side pagination and sorting automatically.
+- Custom skeleton loaders and empty states.
 
 ---
 
@@ -490,7 +461,7 @@ interface DialogStore {
 ### 5.1 Axios Instance & Interceptors
 
 ```
-platform/api.ts
+services/api.ts
 │
 ├── Base Configuration
 │   ├── baseURL: '/api'
@@ -531,7 +502,7 @@ Each module should define a service file that encapsulates all API calls:
 
 ```typescript
 // modules/users/usersService.ts
-import { api } from '@/platform/api';
+import { api } from '@/services/api';
 import type { User, CreateUserDto, UpdateUserDto } from './usersTypes';
 
 export const usersService = {
@@ -574,7 +545,7 @@ export const usersService = {
 #### Query Key Factory
 
 ```typescript
-// platform/queryClient.ts
+// services/queryClient.ts
 export const queryKeys = {
   all:    (resource: string) => [resource] as const,
   list:   (resource: string, params?: Record<string, unknown>) => [resource, 'list', params] as const,
@@ -642,8 +613,13 @@ interface AuthState {
 
 ```typescript
 interface UiState {
+  mode: 'light' | 'dark';
+  sidebarOpen: boolean;
   sidebarCollapsed: boolean;
+  setMode: (mode: 'light' | 'dark') => void;
+  toggleMode: () => void;
   toggleSidebar: () => void;
+  toggleCollapsed: () => void;
 }
 ```
 
@@ -798,7 +774,7 @@ export type ProductFormValues = z.infer<typeof productSchema>;
 
 ```typescript
 // modules/products/ProductsPage.tsx
-import { CrudModule, type CrudModuleConfig } from '@/rma/CrudModule';
+import { CrudModule, type CrudModuleConfig } from '@/rms/r-module/CrudModule';
 import type { Product } from './productsTypes';
 import { productsService } from './productsService';
 import { ProductForm } from './ProductForm';
@@ -842,18 +818,32 @@ export default function ProductsPage() {
 }
 ```
 
-#### Step 5: Register Route
+#### Step 5: Register Module in APP_CONFIG
+
+Modules are now registered dynamically via `services/mock/config.ts`.
 
 ```typescript
-// App.tsx
-<Route path="/products" element={<ProductsPage />} />
+// services/mock/config.ts
+export const APP_CONFIG: AppConfig = {
+  // ...
+  modules: [
+    // ...
+    {
+      id: 'products',
+      name: 'Products',
+      path: '/products',
+      icon: 'InventoryIcon',
+      permissions: ['products:list']
+    },
+  ]
+};
 ```
 
 ### 7.3 Dashboard Module Example
 
 ```typescript
 // modules/analytics/AnalyticsPage.tsx
-import { DashboardModule } from '@/rma/DashboardModule';
+import { DashboardModule } from '@/rms/r-module/DashboardModule';
 import { useQuery } from '@tanstack/react-query';
 import { AreaChart, Area, ResponsiveContainer } from 'recharts';
 
@@ -897,33 +887,28 @@ export default function AnalyticsPage() {
 
 ### 8.1 Layout System
 
-#### Sidebar
+The RMA layout is handled by the `LayoutEngine`, which uses a modular approach to separate shell concerns.
 
-| Property | Value |
+#### Architecture
+
+```
+rms/r-layout/
+├── LayoutEngine.tsx      # Main layout wrapper & grid
+├── components/
+│   ├── Sidebar.tsx       # Navigation drawer & footer
+│   ├── Topbar.tsx        # App bar & breadcrumbs
+│   └── Logo.tsx          # Shared brand component
+└── hooks/
+    └── useLayout.ts      # Responsive & shell derivation logic
+```
+
+#### Layout Components
+
+| Component | Responsibility |
 |---|---|
-| Expanded width | 260px |
-| Collapsed width | 72px |
-| Background | `background.paper` |
-| Border | 1px solid `divider` |
-| Animation | 300ms ease transition |
-| Active indicator | Primary color left border + primary background tint |
-
-#### Top Bar
-
-| Property | Value |
-|---|---|
-| Height | 64px |
-| Background | `background.paper` with backdrop blur |
-| Border | 1px solid `divider` (bottom) |
-| Content | Breadcrumbs (left), User avatar + notifications (right) |
-
-#### Content Area
-
-| Property | Value |
-|---|---|
-| Padding | 32px (desktop), 16px (mobile) |
-| Max width | None (fluid) |
-| Background | `background.default` |
+| **Sidebar** | Drawer persistence, navigation items, user info |
+| **Topbar** | Breadcrumbs, mobile menu trigger, theme toggle |
+| **LayoutEngine** | Responsive margin management, AnimatePresence orchestration |
 
 ### 8.2 Theme & Design Tokens
 
@@ -1191,8 +1176,8 @@ import { useQuery } from '@tanstack/react-query';
 import { DataGrid } from '@mui/x-data-grid';
 
 // 3. Internal absolute imports
-import { useAuthStore } from '@/store/authStore';
-import { queryKeys } from '@/platform/queryClient';
+import { useAuthStore } from '@/store';
+import { queryKeys } from '@/services/queryClient';
 
 // 4. Relative imports
 import type { User } from './usersTypes';
@@ -1240,12 +1225,16 @@ return <Table data={data} ... />;
 - [x] Axios instance with interceptors
 - [x] React Query client + key factory
 - [x] Mock API layer
-- [x] CrudModule engine
+- [x] CrudModule engine (Modularized)
 - [x] DashboardModule engine
+- [x] LayoutEngine (Modularized)
 - [x] Users module (CRUD)
 - [x] Jobs module (CRUD)
 - [x] Banking module (CRUD + custom actions)
 - [x] Overview dashboard
+- [x] AutoForm / AutoView components
+- [x] Alias support (@/*) implementation
+- [x] Dynamic Module Registration (via config)
 
 ### Phase 2 — Enhanced Engine
 
@@ -1292,10 +1281,6 @@ return <Table data={data} ... />;
 ## Appendix A: Quick Reference Card
 
 ```
-┌─────────────────────────────────────────────────────┐
-│                RMA QUICK REFERENCE                   │
-├─────────────────────────────────────────────────────┤
-│                                                      │
 │  New CRUD page:                                      │
 │    1. types → service → schema → page → route       │
 │    2. Page = <CrudModule config={...} />            │
@@ -1306,7 +1291,7 @@ return <Table data={data} ... />;
 │  Permission check:                                   │
 │    Hook:  usePermission('resource:action')           │
 │    Gate:  <PermissionGate permission="...">          │
-│    Store: authStore.hasPermission('...')             │
+│    Store: useAuthStore.getState().hasPermission('...')│
 │                                                      │
 │  Query key:                                          │
 │    queryKeys.all('users')                            │

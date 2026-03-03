@@ -1,7 +1,7 @@
 import { IconButton, Tooltip } from "@mui/material";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
-import { useUIStore } from "../../store/ui.store";
+import { useUIStore } from "@/store/ui.store";
 
 export function ModeToggle() {
   const mode = useUIStore((s) => s.mode);

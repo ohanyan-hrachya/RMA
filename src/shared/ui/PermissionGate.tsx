@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from "react";
-import { usePermission } from "../hooks/use-permission";
+import { usePermission } from "@/shared/hooks/use-permission";
 
 interface Props {
     permission: string;

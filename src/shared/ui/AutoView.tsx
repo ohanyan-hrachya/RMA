@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
-import type { ViewFieldSchema } from "../types";
+import type { ViewFieldSchema } from "@/shared/types";
 
 interface AutoViewProps {
     schema: ViewFieldSchema[];

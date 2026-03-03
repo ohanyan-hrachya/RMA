@@ -6,8 +6,8 @@ import {
 } from "@mui/material/styles";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { useEffect, useMemo, type PropsWithChildren } from "react";
-import { useUIStore } from "../../store/ui.store";
-import type { ColorMode } from "../../shared/types";
+import { useUIStore } from "@/store/ui.store";
+import type { ColorMode } from "@/shared/types";
 
 const baseOptions: ThemeOptions = {
   typography: {

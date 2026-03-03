@@ -1,4 +1,4 @@
-import { useAuthStore } from "../../store";
+import { useAuthStore } from "@/store";
 
 /**
  * Returns true if the current user has the given permission string.

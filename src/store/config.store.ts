@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import type { AppConfig } from "../shared/types";
-import { mockConfigApi } from "../services/mockApi";
+import type { AppConfig } from "@/shared/types";
+import { mockConfigApi } from "@/services/mockApi";
 
 interface ConfigState {
     config: AppConfig | null;

@@ -1,6 +1,6 @@
+import type { ColorMode } from "@/shared/types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { ColorMode } from "../app/providers/theme";
 
 type UIState = {
   sidebarOpen: boolean;

@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Grid";
 import { useState, useEffect } from "react";
-import type { FormFieldSchema } from "../types";
+import type { FormFieldSchema } from "@/shared/types";
 
 interface AutoFormProps {
     schema: FormFieldSchema[];

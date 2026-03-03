@@ -67,11 +67,11 @@ export default function UsersPage() {
 
 | Layer    | Responsibility              |
 | -------- | --------------------------- |
-| UI       | Rendering only              |
-| Domain   | Validation + business rules |
-| Services | API communication           |
-| RMA Core | Orchestration               |
-| Store    | Client session state only   |
+| UI       | Pure presentation (MUI)     |
+| Domain   | Shared types & contracts    |
+| Services | API layer (Modularized Mock)|
+| RMS Core | Reusable engine orchestration|
+| Store    | Centralized global state    |
 
 Server data is handled by React Query.
 Global client state is handled by Zustand.
@@ -90,13 +90,14 @@ Global client state is handled by Zustand.
 
 ```
 src/
-  app/          → layout, router, providers
-  platform/     → axios, query client, auth helpers
-  rma/          → core reusable modules (Crud, Form, Dashboard)
-  modules/      → feature modules
-  shared/       → reusable UI + hooks + utils
-  store/        → zustand slices
-  assets/
+  app/          → Application providers & main entry
+  rms/          → 🔥 Reusable Module System (Engine)
+    r-layout/   → Sidebar, Topbar, Layout hooks
+    r-module/   → CrudModule, RowActions, Hooks
+  modules/      → Feature-specific pages & config
+  services/     → Data layer (Axios, Modular Mock API)
+  shared/       → Reusable UI (AutoForm, DataTable) & Helpers
+  store/        → Zustand slices for Auth, UI, and Config
 ```
 
 ---
@@ -110,12 +111,12 @@ Generates full CRUD interface from config.
 Features:
 
 - Server-side pagination/sorting/filtering
-- Drawer-based create/edit
-- Zod validation
-- Row + bulk actions
+- Logic-UI separation (useCrudModule hook)
+- AutoForm & AutoView integration
+- Standardized RowActions component
 - Permission-based visibility
-- Query invalidation
-- Custom action dialogs
+- Automatic query invalidation
+- Entry animations (Framer Motion)
 
 ---
 
@@ -207,7 +208,7 @@ Analytics dashboard with KPI cards and charts.
    - `crud/` (config definition)
    - `ui/` (thin page wrapper)
 
-3. Register module in module registry
+3. Register module in `services/mock/config.ts` (APP_CONFIG)
 
 No changes required inside RMA core.
 
@@ -268,5 +269,6 @@ It enforces structure while keeping flexibility.
 
 ## Status
 
-Architecture foundation ready.
-Modules can be added incrementally.
+Architecture foundation version 1.0 — Refactored to modular senior-developer standard.
+Core engine components split for maximum maintainability.
+Full Type-Safety verified.
