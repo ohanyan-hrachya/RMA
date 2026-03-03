@@ -29,7 +29,11 @@ const baseOptions: ThemeOptions = {
           "&:hover": { boxShadow: "none" },
         },
         containedPrimary: {
-          "&:hover": { boxShadow: "0 4px 14px rgba(16, 185, 129, 0.3)" },
+          color: "#F1F5F9",
+          "&:hover": {
+            boxShadow: "0 4px 14px rgba(16, 185, 129, 0.4)",
+            backgroundColor: "#059669"
+          },
         },
       },
     },
@@ -37,20 +41,20 @@ const baseOptions: ThemeOptions = {
       styleOverrides: {
         root: {
           borderRadius: 16,
-          boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06)",
+          boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
         },
       },
     },
     MuiDrawer: {
       styleOverrides: {
-        paper: { borderRadius: "16px 0 0 16px" },
+        paper: { border: "none" },
       },
     },
-    MuiChip: {
+    MuiDivider: {
       styleOverrides: {
-        root: { borderRadius: 8, fontWeight: 500 },
-      },
-    },
+        root: { opacity: 0.1 }
+      }
+    }
   },
 };
 
@@ -60,7 +64,7 @@ const lightTheme: PaletteOptions = {
   secondary: { main: "#0F172A" },
   background: { default: "#F1F5F9", paper: "#FFFFFF" },
   text: { primary: "#020617", secondary: "#475569" },
-  divider: "#E2E8F0",
+  divider: "rgba(0,0,0,0.08)",
   success: { main: "#10B981", light: "#D1FAE5" },
   warning: { main: "#F59E0B", light: "#FEF3C7" },
   error: { main: "#EF4444", light: "#FEE2E2" },
@@ -73,11 +77,11 @@ const darkTheme: PaletteOptions = {
   secondary: { main: "#F1F5F9" },
   background: { default: "#020617", paper: "#0F172A" },
   text: { primary: "#F1F5F9", secondary: "#94A3B8" },
-  divider: "#1E293B",
-  success: { main: "#10B981", light: "#064E3B" },
-  warning: { main: "#F59E0B", light: "#451A03" },
-  error: { main: "#EF4444", light: "#450A0A" },
-  info: { main: "#3B82F6", light: "#172554" },
+  divider: "rgba(255,255,255,0.08)",
+  success: { main: "#10B981", light: "rgba(16, 185, 129, 0.15)" },
+  warning: { main: "#F59E0B", light: "rgba(245, 158, 11, 0.15)" },
+  error: { main: "#EF4444", light: "rgba(239, 68, 68, 0.15)" },
+  info: { main: "#06B6D4", light: "rgba(6, 182, 212, 0.15)" },
 };
 
 function buildTheme(mode: ColorMode) {
@@ -94,9 +98,9 @@ export const Theme = ({ children }: PropsWithChildren) => {
 
   const theme = useMemo(() => buildTheme(mode), [mode]);
 
-  // Keep browser UI in sync (scrollbars, form controls, etc.)
   useEffect(() => {
     document.documentElement.style.colorScheme = mode;
+    document.body.style.backgroundColor = mode === 'dark' ? '#020617' : '#F1F5F9';
   }, [mode]);
 
   return (

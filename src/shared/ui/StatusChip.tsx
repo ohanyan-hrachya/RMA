@@ -42,14 +42,24 @@ const STATUS_CONFIG: Record<
 };
 
 export function StatusChip({ status, size = "small" }: StatusChipProps) {
-    const cfg = STATUS_CONFIG[status] ?? { label: status, color: "default" as const };
+    const cfg = STATUS_CONFIG[typeof status === 'string' ? status.toLowerCase() : status] ?? { label: status, color: "default" as const };
+
     return (
         <Chip
             label={cfg.label}
             color={cfg.color}
             size={size}
             variant="filled"
-            sx={{ fontWeight: 600, fontSize: "0.75rem" }}
+            sx={{
+                fontWeight: 700,
+                fontSize: "0.7rem",
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                borderRadius: '6px',
+                height: 24,
+                // Ensure text is white/slate-100 on these colored chips
+                color: "#F1F5F9"
+            }}
         />
     );
 }

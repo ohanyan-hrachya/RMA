@@ -14,7 +14,7 @@ import Divider from "@mui/material/Divider";
 import CloseIcon from "@mui/icons-material/Close";
 import { type GridColDef } from "@mui/x-data-grid";
 
-import { AutoForm, AutoView, DataTable, PageHeader } from "@/shared/ui";
+import { AutoForm, DataTable, PageHeader } from "@/shared/ui";
 import type { CrudModuleConfig } from "@/shared/types";
 
 import { RowActions } from "./components/RowActions";

@@ -18,14 +18,6 @@ const ICON_MAP: Record<string, React.ReactNode> = {
     overview: <DashboardIcon />,
 };
 
-const COLOR_MAP: Record<string, string> = {
-    users: "success.light",
-    jobs: "success.light",
-    banking: "success.light",
-    overview: "success.light",
-    success: "success.light",
-};
-
 interface KpiCardProps {
     title: string;
     value: string | number;
@@ -37,7 +29,9 @@ interface KpiCardProps {
 
 export function KpiCard({ title, value, subtitle, resource, change, delay = 0 }: KpiCardProps) {
     const icon = resource ? ICON_MAP[resource] : <DashboardIcon />;
-    const iconBg = resource ? COLOR_MAP[resource] : "success.light";
+
+    // Standardize all icon backgrounds to Emerald/Success palette to avoid "crushed" colors
+    const iconBg = "success.light";
     const iconColor = "success.main";
 
     return (
@@ -47,14 +41,14 @@ export function KpiCard({ title, value, subtitle, resource, change, delay = 0 }:
             transition={{ delay, duration: 0.3 }}
             style={{ height: "100%" }}
         >
-            <Card sx={{ height: "100%" }}>
+            <Card sx={{ height: "100%", bgcolor: 'background.paper' }}>
                 <CardContent>
                     <Stack direction="row" alignItems="flex-start" justifyContent="space-between">
                         <Box>
                             <Typography variant="body2" color="text.secondary" fontWeight={500}>
                                 {title}
                             </Typography>
-                            <Typography variant="h4" fontWeight={700} sx={{ mt: 0.5, mb: 0.5 }}>
+                            <Typography variant="h4" fontWeight={800} sx={{ mt: 0.5, mb: 0.5 }}>
                                 {value}
                             </Typography>
                             {subtitle && (
@@ -71,7 +65,7 @@ export function KpiCard({ title, value, subtitle, resource, change, delay = 0 }:
                                     )}
                                     <Typography
                                         variant="caption"
-                                        fontWeight={600}
+                                        fontWeight={700}
                                         color={change >= 0 ? "success.main" : "error.main"}
                                     >
                                         {change >= 0 ? "+" : ""}{change}%
@@ -83,7 +77,7 @@ export function KpiCard({ title, value, subtitle, resource, change, delay = 0 }:
                             sx={{
                                 width: 44,
                                 height: 44,
-                                borderRadius: 2,
+                                borderRadius: '12px',
                                 bgcolor: iconBg,
                                 color: iconColor,
                                 display: "flex",
