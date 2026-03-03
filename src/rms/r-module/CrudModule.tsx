@@ -12,7 +12,7 @@ import IconButton from "@mui/material/IconButton";
 import Alert from "@mui/material/Alert";
 import Divider from "@mui/material/Divider";
 import CloseIcon from "@mui/icons-material/Close";
-import { type GridColDef } from "@mui/x-data-grid";
+import { type GridColDef, type GridCellParams } from "@mui/x-data-grid";
 
 import { AutoForm, DataTable, PageHeader } from "@/shared/ui";
 import type { CrudModuleConfig } from "@/shared/types";
@@ -46,7 +46,7 @@ export function CrudModule<T extends { id: number }>({
                 headerName: "Actions",
                 width: config.extraActions ? 180 : 130,
                 sortable: false,
-                renderCell: (params) => (
+                renderCell: (params: GridCellParams<T>) => (
                     <RowActions
                         row={params.row as T}
                         canView={permissions.canView}
